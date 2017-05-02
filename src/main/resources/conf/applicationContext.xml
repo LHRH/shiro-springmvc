@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 安全管理器
+          1.缓存技术: 缓存管理
+          2.realm: 负责获取处理数据的
+    -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="realm" ref="jdbcRealm"/>
+    </bean>
+
+    <bean id="jdbcRealm" class="com.lh.shiro.bean.ShiroRealm">
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!--加密方式-->
+                <property name="hashAlgorithmName" value="MD5"></property>
+                <!--加密次数-->
+                <property name="hashIterations" value="1024"></property>
+            </bean>
+        </property>
+    </bean>
+    <!-- 缓存管理器 使用Ehcache实现 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
+    </bean>
+
+    <!-- Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+
+    <!--启动shiro注解-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+    <!--Shiro 的Spring 远程支持有两部分：配置客户端远程调用和配置服务器接收及处理远程调用。-->
+    <bean id="secureRemoteInvocationExecutor" class="org.apache.shiro.spring.remoting.SecureRemoteInvocationExecutor">
+        <property name="securityManager" ref="securityManager"></property>
+    </bean>
+
+    <!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/app/login"/>
+        <property name="successUrl" value="/app/success"/>
+        <property name="unauthorizedUrl" value="/app/unauthorized"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /app/logon = anon <!--不需要登录即可访问-->
+                /app/logout = logout
+                /** = authc  <!--登录访问-->
+            </value>
+        </property>
+    </bean>
+
+
+</beans>
