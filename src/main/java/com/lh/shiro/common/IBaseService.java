@@ -5,7 +5,7 @@ import com.lh.shiro.common.utils.Msg;
 import java.util.List;
 
 /**
- * Created by Beeant on 2016/12/24.
+ * Created by linghu on 17/04/17.
  */
 public interface IBaseService<T> {
     Msg<T> insert(T record);

@@ -12,7 +12,7 @@ public class Test {
     private static Logger logger = LoggerFactory.getLogger(Test.class);
 
     public static void main(String[] args) {
-        String str = "令狐";
+        String str = "测试";
         logger.info("str.getBytes()->{}", str);
         logger.info("编码->{}", Base64.encodeToString(str.getBytes()));
         logger.info("解码{}", Base64.decodeToString(Base64.encodeToString(str.getBytes())));

@@ -3,7 +3,7 @@ package com.lh.shiro.common.utils;
 import java.util.List;
 
 /**
- * Created by xiaobiao on 2016/12/28.
+ * Created by linghu on 17/04/17.
  */
 public class Msg<T> {
 

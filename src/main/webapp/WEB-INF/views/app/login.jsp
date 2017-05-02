@@ -21,5 +21,10 @@
     <br/>
     <input type="submit" value="logon">
 </form>
+
+<h3>退出登录</h3>
+<form action="${ctp}/app/logout">
+    <input type="submit" value="logout">
+</form>
 </body>
 </html>
